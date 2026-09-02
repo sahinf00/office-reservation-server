@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ofis.rezervasyon.dto.request.CreateFloorRequest;
 import com.ofis.rezervasyon.dto.response.DeskResponse;
 import com.ofis.rezervasyon.dto.response.FloorResponse;
-import com.ofis.rezervasyon.model.Desk;
 import com.ofis.rezervasyon.model.Floor;
 import com.ofis.rezervasyon.repository.FloorRepository;
 
@@ -42,10 +41,9 @@ public class FloorService {
         List<Floor> floors = floorRepository.findAll();
         return floors.stream()
                 .map(floor -> {
-                    // filters the desks to only include active ones and maps them to DeskResponse
-                    List<DeskResponse> activeDesks = (floor.getDesks() == null) ? List.of() :
+                    // maps each Desk to DeskResponse
+                    List<DeskResponse> deskList = (floor.getDesks() == null) ? List.of() :
                         floor.getDesks().stream()
-                            .filter(Desk::isActive)
                             .map(desk -> new DeskResponse(
                                 desk.getId(),
                                 desk.getDeskNumber(),
@@ -54,12 +52,12 @@ public class FloorService {
                             ))
                             .toList();
 
-                    // FloorResponse is given activeDesks as the list of desks
+                    // FloorResponse is given deskList as the list of desks
                     return new FloorResponse(
                         floor.getId(),
                         floor.getFloorNumber(),
                         floor.getName(),
-                        activeDesks
+                        deskList
                     );
                 })
                 .toList();
