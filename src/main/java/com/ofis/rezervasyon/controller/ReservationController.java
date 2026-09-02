@@ -63,6 +63,12 @@ public class ReservationController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/reserved-desks")
+    public ResponseEntity<List<Long>> getReservedDeskIdsForDate(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate reservationDate) {
+        List<Long> reservedDeskIds = reservationService.getReservedDeskIdsForDate(reservationDate);
+        return ResponseEntity.ok(reservedDeskIds);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> cancelReservation(@PathVariable Long id) {
         reservationService.cancelReservation(id);

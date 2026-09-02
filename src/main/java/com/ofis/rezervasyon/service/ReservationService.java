@@ -103,6 +103,14 @@ public class ReservationService {
         return reservationsPage.map(this::mapToReservationResponse);
     }
 
+    @Transactional(readOnly = true)
+    public List<Long> getReservedDeskIdsForDate(LocalDate reservationDate) {
+        List<Reservation> reservations = reservationRepository.findAllWithFilters(reservationDate, null, ReservationStatus.CONFIRMED, Pageable.unpaged()).getContent();
+        return reservations.stream()
+                .map(reservation -> reservation.getDesk().getId())
+                .toList();
+    }
+
     @Transactional
     public void cancelReservation(Long reservationId) {
         String currentUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
