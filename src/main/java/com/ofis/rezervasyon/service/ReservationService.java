@@ -139,6 +139,13 @@ public class ReservationService {
         reservationRepository.save(reservation);
     }
 
+    // to be injected into DeskService's deleteDesk method to cancel deleted desk's future reservations
+    // can be implemented as event listener for desk deletion events in the future
+    @Transactional
+    public void cancelFutureReservationsForDesk(Long deskId) {
+        reservationRepository.cancelFutureReservationsForDesk(deskId);
+    }
+
     @Transactional
     public int updateCompletedReservations() {
         return reservationRepository.updateCompletedReservations(
