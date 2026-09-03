@@ -49,7 +49,7 @@ public class ReservationController {
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate reservationDate,
             @RequestParam(required = false) Long floorId,
             @RequestParam(required = false)  ReservationStatus status,
-            @PageableDefault(size = 10, sort = "reservationDate, id", direction = Sort.Direction.DESC) 
+            @PageableDefault(size = 10, sort = {"reservationDate", "id"}, direction = Sort.Direction.DESC) 
             @ParameterObject Pageable pageable
             
     ) {
