@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 public class DeskService {
     private final DeskRepository deskRepository;
     private final FloorRepository floorRepository;
+    private final ReservationService reservationService; // for providing deleteDesk method reservation cancellation
 
     @Transactional
     public DeskResponse createDesk(CreateDeskRequest request) {
@@ -87,5 +88,6 @@ public class DeskService {
     
         desk.setActive(false);
         deskRepository.save(desk);
+        reservationService.cancelFutureReservationsForDesk(id);
     }
 }
