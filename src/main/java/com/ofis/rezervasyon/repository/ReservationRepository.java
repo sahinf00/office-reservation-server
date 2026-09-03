@@ -28,6 +28,13 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
                                        @Param("currentStatus") ReservationStatus currentStatus,
                                        @Param("currentDate") LocalDate currentDate);
 
+    @Modifying
+    @Query("UPDATE Reservation r SET r.status = 'CANCELLED' " +
+            "WHERE r.desk.id= :deskId " +
+            "AND r.reservationDate >= CURRENT_DATE " +
+            "AND r.status = 'CONFIRMED'")
+    void cancelFutureReservationsForDesk(@Param("deskId") Long deskId);
+
     @EntityGraph(attributePaths = {"desk", "desk.floor"})
     @Query("SELECT r FROM Reservation r " +
         "WHERE (cast(:reservationDate as date) IS NULL OR r.reservationDate = :reservationDate) " +
